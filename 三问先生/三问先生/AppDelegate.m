@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "Reachability.h"
 @interface AppDelegate ()
 
 @end
@@ -16,10 +16,40 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+//    self.window=[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+//    self.window.backgroundColor=[UIColor whiteColor];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachability:) name:kReachabilityChangedNotification object:nil];
+    
+    
+    
+    
+    
+    
+    
     return YES;
 }
 
+-(void)reachability:(NSNotification * )notification{
+    Reachability * currentReachability=[notification object];
+    NetworkStatus status = [currentReachability currentReachabilityStatus];
+    switch (status) {
+        case NotReachable:
+            SWLog(@"没有网络");
+            break;
+        case ReachableViaWWAN:
+            SWLog(@"使用3G/GPRS网络");
+            break;
+        case ReachableViaWiFi:
+            SWLog(@"使用wifi网络");
+            break;
+    }
+
+
+
+}
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
